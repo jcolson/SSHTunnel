@@ -19,8 +19,8 @@
 
 #import "messages.h"
 
-#import "AMServer.h";
-#import "AMService.h";
+#import "AMServer.h"
+#import "AMService.h"
 
 
 @interface AMSession : NSObject <NSCoding> 

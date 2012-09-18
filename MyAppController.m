@@ -63,7 +63,8 @@
 	[self setHostName:[[NSHost currentHost] name]];
 	NSRect currentSize = [[mainApplicationWindow contentView] frame];
 	[sessionView setFrame:currentSize];
-	[[mainApplicationWindow contentView] addSubview:sessionView];
+    [self showSubView:sessionView];
+//	[[mainApplicationWindow contentView] addSubview:sessionView];
 	
 	[preferencesController addObserver:self forKeyPath:@"values.selectedTransitionType" options:NSKeyValueObservingOptionNew context:nil];
 	[preferencesController addObserver:self forKeyPath:@"values.selectedTransitionSubtype" options:NSKeyValueObservingOptionNew context:nil];
@@ -408,116 +409,52 @@
 
 - (IBAction) displaySessionView:(id)sender
 {
+    [self showSubView:sessionView];
+}
+
+- (void) showSubView:(NSView *)theView {
     if (![mainApplicationWindow isKeyWindow]) {
         [self openMainWindow:nil];
     }
-    
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
-	{
-		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
-			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
-		
-		NSRect currentSize = [[mainApplicationWindow contentView] frame];
-		[sessionView setFrame:currentSize];
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:sessionView];
-	}
+ 		NSRect currentSize = [[mainApplicationWindow contentView] frame];
+		[theView setFrame:currentSize];
+
+    @try {
+        [[mainApplicationWindow contentView] setSubviews:[NSArray array]];
+    } @catch (id theException) {
+        NSLog(@"not sure why this throws an out of bounds exception some times ... but here it did again I assume ... retrying");
+        @try {
+            [[mainApplicationWindow contentView] setSubviews:[NSArray array]];
+        } @catch (id theException) {
+            NSLog(@"not sure why this throws an out of bounds exception some times ... but here it did again I assume ... retried and still caught it");
+        }
+    }
+        [[[mainApplicationWindow contentView] animator] addSubview:theView];
 }
 
 - (IBAction) displayServerView:(id)sender
 {
-    if (![mainApplicationWindow isKeyWindow]) {
-        [self openMainWindow:nil];
-    }
-    
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:serverView])
-	{
-		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
-			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
-		
-		NSRect currentSize = [[mainApplicationWindow contentView] frame];
-		[serverView setFrame:currentSize];
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serverView];
-	}
+   [self showSubView: serverView];
 }
 
 - (IBAction) displayAboutView:(id)sender
 {
-    if (![mainApplicationWindow isKeyWindow]) {
-        [self openMainWindow:nil];
-    }
-    
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:aboutView])
-	{
-		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
-			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
-		
-		NSRect currentSize = [[mainApplicationWindow contentView] frame];
-		[aboutView setFrame:currentSize];
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:aboutView];
-	}
+    [self showSubView:aboutView];
 }
 
 - (IBAction) displayRegisterView:(id)sender
 {
-    if (![mainApplicationWindow isKeyWindow]) {
-        [self openMainWindow:nil];
-    }
-    
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:registerView])
-	{
-		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
-			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
-		
-		NSRect currentSize = [[mainApplicationWindow contentView] frame];
-		[registerView setFrame:currentSize];
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:registerView];
-	}
+    [self showSubView:registerView];
 }
 
 - (IBAction) displayServiceView:(id)sender
 {
-    if (![mainApplicationWindow isKeyWindow]) {
-        [self openMainWindow:nil];
-    }
-    
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:serviceView])
-	{
-		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
-			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
-			
-		NSRect currentSize = [[mainApplicationWindow contentView] frame];
-		[serviceView setFrame:currentSize];
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serviceView];
-	}
+    [self showSubView:serviceView];
 }
 
 - (IBAction) displayPreferenceView:(id)sender
 {
-    if (![mainApplicationWindow isKeyWindow]) {
-        [self openMainWindow:nil];
-    }
-    
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
-	{
-		oldWindowFrame = [mainApplicationWindow frame];
-		
-		if (oldWindowFrame.size.height < preferencesViewHeight)
-		{
-			NSRect wframe = oldWindowFrame;
-			wframe.size.height = preferencesViewHeight;
-			[mainApplicationWindow setFrame:wframe display:NO animate:YES];
-		}
-		
-		NSRect currentSize = [[mainApplicationWindow contentView] frame];
-		[preferencesView setFrame:currentSize];
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:preferencesView];
-	}
+    [self showSubView:preferencesView];
 }
 
 

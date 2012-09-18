@@ -242,7 +242,7 @@
 		stopPort = [[bounds objectAtIndex:1] intValue];
 		
 		for (i = startPort; i <= stopPort; i++)
-			[ports addObject:[NSString stringWithFormat:@"%d", i]];
+			[ports addObject:[NSString stringWithFormat:@"%ld", i]];
 	}
 	
 	return ports;
