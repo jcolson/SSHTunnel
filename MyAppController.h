@@ -32,7 +32,7 @@
 #import "AMServiceViewController.h"
 
 
-@interface MyAppController : AMBaseViewController {
+@interface MyAppController : AMBaseViewController <CAAnimationDelegate> {
 	
 	IBOutlet NSTextField				*errorMessage;
 	IBOutlet NSView						*errorPanel;
