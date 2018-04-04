@@ -16,6 +16,8 @@
 
 #import "AMSession.h"
 
+#import "AMResourcesHelper.h"
+
 @implementation AMSession
 
 @synthesize	sessionName;
@@ -43,7 +45,7 @@
 {
 	self = [super init];
 	
-	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+	[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusRed"]];
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
 	[self setSessionTunnelType:AMSessionOutgoingTunnel];
@@ -92,12 +94,12 @@
 {
 	self = [super init];
 	
-	sessionName			= [[coder decodeObjectForKey:@"MVsessionName"] retain];
-	portsMap			= [[coder decodeObjectForKey:@"portsMap"] retain];
-	remoteHost			= [[coder decodeObjectForKey:@"MVremoteHost"] retain];
-	statusImagePath		= [[coder decodeObjectForKey:@"MVStatusImagePath"] retain];
-	currentServer		= [[coder decodeObjectForKey:@"MVcurrentServer"] retain];
-	globalProxyPort		= [[coder decodeObjectForKey:@"MVdynamicProxyPort"] retain];
+	sessionName			= [coder decodeObjectForKey:@"MVsessionName"];
+	portsMap			= [coder decodeObjectForKey:@"portsMap"];
+	remoteHost			= [coder decodeObjectForKey:@"MVremoteHost"];
+	statusImagePath		= [coder decodeObjectForKey:@"MVStatusImagePath"];
+	currentServer		= [coder decodeObjectForKey:@"MVcurrentServer"];
+	globalProxyPort		= [coder decodeObjectForKey:@"MVdynamicProxyPort"];
 	sessionTunnelType	= [coder decodeIntForKey:@"MVoutgoingTunnel"];
 	useDynamicProxy		= [coder decodeBoolForKey:@"MVuseDynamicProxy"];
 	childrens			= [coder decodeObjectForKey:@"MVChildrens"];
@@ -112,7 +114,7 @@
 	autoReconnectTimes = 0;
 	
 	if (![self isGroup])
-		[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+		[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusRed"]];
 	else
 		[self setStatusImagePath:@""];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
@@ -153,7 +155,6 @@
 	
 	sshTask = nil;
 	
-	[super dealloc];
 }
 
 
@@ -242,7 +243,7 @@
 		stopPort = [[bounds objectAtIndex:1] intValue];
 		
 		for (i = startPort; i <= stopPort; i++)
-			[ports addObject:[NSString stringWithFormat:@"%ld", i]];
+			[ports addObject:[NSString stringWithFormat:@"%ld", (long)i]];
 	}
 	
 	return ports;
@@ -405,7 +406,7 @@
 														object:[@"Initializing connection for session "
 																stringByAppendingString:[self sessionName]]];
 	
-	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusOrange" ofType:@"tif"]];
+	[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusOrange"]];
 	
 	helperPath = nil;
 	args = nil;
@@ -452,7 +453,7 @@
 		{
 			[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification object:[stdOut fileHandleForReading]];
 			
-			[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+			[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusRed"]];
 			[self setConnected:NO];
 			[self setConnectionInProgress:NO];
 			[self setConnectionLink:@""];
@@ -467,7 +468,7 @@
 			[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification object:[stdOut fileHandleForReading]];
 			[self setConnected:NO];
 			[self setConnectionInProgress:NO];
-			[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+			[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusRed"]];
 			[self setConnectionLink:@""];
 			[sshTask terminate];
 			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage
@@ -479,7 +480,7 @@
 		{
 			[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification  object:[stdOut fileHandleForReading]];
 			
-			[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+			[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusRed"]];
 			[self setConnected:NO];
 			[self setConnectionInProgress:NO];
 			[self setConnectionLink:@""];
@@ -493,7 +494,7 @@
 		{
 			[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification object:[stdOut fileHandleForReading]];
 			
-			[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+			[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusRed"]];
 			[self setConnected:NO];
 			[self setConnectionInProgress:NO];
 			[self setConnectionLink:@""];
@@ -509,7 +510,7 @@
 			
 			[self setConnected:YES];
 			[self setConnectionInProgress:NO];
-			[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusGreen" ofType:@"tif"]];
+			[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusGreen"]];
 			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
 																object:[@"Sucessfully connects session "
 																		stringByAppendingString:[self sessionName]]];
@@ -544,7 +545,7 @@
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
 	[self setConnectionLink:@""];
-	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+	[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusRed"]];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
 														object:[@"Connection close for session "

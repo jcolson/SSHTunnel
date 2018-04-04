@@ -175,9 +175,10 @@
 	{
 		int resp = NSRunAlertPanel([NSString stringWithFormat:@"New version %@.%@ is out!", 
 									remoteMajorVersion, remoteMinorVersion],
-								   [serverVersion valueForKey:@"Changes"], 
+                                   @"%@",
 								   @"Download Version", 
-								   @"Ignore", 
+								   @"Ignore",
+                                   [serverVersion valueForKey:@"Changes"],
 								   nil);
 		
 		if (resp == NSAlertDefaultReturn)
@@ -238,7 +239,7 @@
 	}
 	 */
 	NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
-	statusBarItem = [[statusBar statusItemWithLength: NSVariableStatusItemLength] retain];
+	statusBarItem = [statusBar statusItemWithLength: NSVariableStatusItemLength];
 	
 	[statusBarItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"taskbarIcon" ofType:@"tiff"]]];
 	[statusBarItem setEnabled:YES];

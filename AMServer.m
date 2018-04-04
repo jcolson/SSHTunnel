@@ -16,6 +16,8 @@
 
 #import "AMServer.h"
 
+#import "AMResourcesHelper.h"
+
 @implementation AMServer
 
 @synthesize serverName;
@@ -49,18 +51,17 @@
 	statusImagePath = nil;
 	stdOut = nil;
 	
-	[super dealloc];
 }
 
 - (id) initWithCoder:(NSCoder *)coder
 {
 	self = [super init];
 	
-	host		= [[coder decodeObjectForKey:@"host"] retain];
-	port		= [[coder decodeObjectForKey:@"port"] retain];
-	username	= [[coder decodeObjectForKey:@"username"] retain];
-	password	= [[coder decodeObjectForKey:@"password"] retain];
-	serverName	= [[coder decodeObjectForKey:@"serverName"] retain];
+	host		= [coder decodeObjectForKey:@"host"];
+	port		= [coder decodeObjectForKey:@"port"];
+	username	= [coder decodeObjectForKey:@"username"];
+	password	= [coder decodeObjectForKey:@"password"];
+	serverName	= [coder decodeObjectForKey:@"serverName"];
 	
 	[self setStandartInput:[NSPipe pipe]];
 	
@@ -104,9 +105,9 @@
 	
 	
 	if ([checkSuccess evaluateWithObject:outputContent] == YES)
-		[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusGreen" ofType:@"tif"]];
+		[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusGreen"]];
 	else
-		[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+		[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusRed"]];
 	
 	[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification object:[stdOut fileHandleForReading]];
 	[ping terminate];
@@ -128,7 +129,7 @@
 	if ([self host] == nil)
 		return;
 	
-	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusOrange" ofType:@"tif"]];
+	[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusOrange"]];
 	[ping setLaunchPath:@"/sbin/ping"];
 	[ping setArguments:[NSArray arrayWithObjects:@"-c", @"1", @"-t", @"2", [self host], nil]];
 	[ping setStandardOutput:stdOut];
